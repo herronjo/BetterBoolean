@@ -199,9 +199,9 @@ function BetterBoolean(value) {
 				}
 				break;
 			case "string":
-				if (sign.toLowerCase() == "true" || sign.toLowerCase() == "positive") {
+				if (sign.toLowerCase() == "false" || sign.toLowerCase() == "positive") {
 					this.sign = 1;
-				} else if (sign.toLowerCase() == "false" || sign.toLowerCase() == "negative") {
+				} else if (sign.toLowerCase() == "true" || sign.toLowerCase() == "negative") {
 					this.sign = -1;
 				} else {
 					throw "Invalid sign value";
