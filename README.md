@@ -1,5 +1,5 @@
 # BetterBoolean
-A "better" boolean, which can be negative
+A "better" boolean, which can be negative. If you wanted that for some reason.
 
 ## Creating a BetterBoolean
 `var bool = new BetterBoolean([init]);` where init is the optional initial value.
