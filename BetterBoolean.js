@@ -1,23 +1,51 @@
 'use strict';
+/**
+ * The main BetterBoolean class.
+ * 
+ * @author Joshua Herron
+ * @license ISC
+ */
 class BetterBoolean {
+	/**
+	 * Create a BetterBoolean.
+	 * @param {*} value - (Optional) The initial value to load the BetterBoolean with.
+	 */
 	constructor(value) {
 		this.sign = 1;
 		this.state = false;
 		if (value !== undefined) {
 			this.set(value);
 		}
-		return this.valueOf();
 	}
+	/**
+	 * The type of the BetterBoolean.
+	 */
 	type = "BetterBoolean";
+	/**
+	 * Converts the BetterBoolean to a String.
+	 * @returns The String representation of the BetterBoolean.
+	 */
 	toString() {
 		return ((this.sign == -1) ? "-" : "").concat(this.state.toString());
 	}
+	/**
+	 * Converts the BetterBoolean to an Integer.
+	 * @returns The Integer representation of the BetterBoolean.
+	 */
 	toInt() {
 		return this.sign * this.state;
 	}
+	/**
+	 * Converts the BetterBoolean to its primitive representation.
+	 * @returns The String representation of the BetterBoolean.
+	 */
 	valueOf() {
 		return this.toString();
 	}
+	/**
+	 * Set the value of the BetterBoolean.
+	 * @param {*} value The value to load into the BetterBoolean.
+	 */
 	set(value) {
 		switch (typeof value) {
 			case "boolean":
@@ -73,6 +101,10 @@ class BetterBoolean {
 				break;
 		}
 	}
+	/**
+	 * Set the sign of the BetterBoolean.
+	 * @param {*} sign An object representing what to set the sign of the BetterBoolean to.
+	 */
 	setSign(sign) {
 		switch (typeof sign) {
 			default:
@@ -93,6 +125,10 @@ class BetterBoolean {
 				break;
 		}
 	}
+	/**
+	 * Set the state of the BetterBoolean.
+	 * @param {*} state An object representing what to set the stateof the BetterBoolean to.
+	 */
 	setState(state) {
 		switch (typeof state) {
 			default:
@@ -113,6 +149,11 @@ class BetterBoolean {
 				break;
 		}
 	}
+	/**
+	 * Compare two BetterBooleans or the BetterBoolean to any compatible type.
+	 * @param {*} other The other object to compare the BetterBoolean to.
+	 * @returns A BetterBoolean representing if the BetterBoolean and other object are equal.
+	 */
 	equals(other) {
 		var retVal = new BetterBoolean();
 		switch (typeof other) {
