@@ -1,260 +1,134 @@
-function BetterBoolean(value) {
-	this.type = Object.defineProperty(this, "type", {value:"BetterBoolean"});
-	this.sign = 1;
-	this.state = 0;
-	if (value != undefined) {
-		if (typeof value == "boolean") {
-			this.sign = 1;
-			if (value) {
-				this.state = 1;
-			} else {
-				this.state = 0;
-			}
-		} else if (typeof value == "object" && value.constructor.name == "BetterBoolean") {
-			this.sign = value.sign;
-			this.state = value.state;
-		} else if (typeof value == "string" && (value == "true" || value == "false" || value == "-true" || value == "-false")) {
-			switch (value) {
-				default:
-					throw "Invalid initial value";
-					break;
-				case "true":
-					this.state = 1;
-					this.sign = 1;
-					break;
-				case "false":
-					this.state = 0;
-					this.sign = 1;
-					break;
-				case "-true":
-					this.state = 1;
-					this.sign = -1;
-					break;
-				case "-false":
-					this.state = 0;
-					this.sign = -1;
-					break;
-			}
-		} else if (typeof value == "number" && (value == -1 || value == -0 || value == 0 || value == 1)) {
-			if (value == 1) {
-				this.sign = 1;
-				this.state = 1;
-			} else if (value == -1) {
-				this.sign = -1;
-				this.state = 1;
-			} else if (value == -0) {
-				this.sign = -1;
-				this.state = 0;
-			} else {
-				this.sign = 1;
-				this.state = 0;
-			}
-		} else {
-			throw "Invalid initial value";
+'use strict';
+class BetterBoolean {
+	constructor(value) {
+		this.sign = 1;
+		this.state = false;
+		if (value !== undefined) {
+			this.set(value);
 		}
+		return this.valueOf();
 	}
-	this.toString = function() {
-		var returnValue = "";
-		if (this.sign == -1) {
-			returnValue = "-";
-		}
-		if (this.state == 0) {
-			returnValue = returnValue+"false";
-		} else {
-			returnValue = returnValue+"true";
-		}
-		return returnValue;
+	type = "BetterBoolean";
+	toString() {
+		return ((this.sign == -1) ? "-" : "").concat(this.state.toString());
 	}
-	this.toInt = function() {
-		return this.sign*this.state;
+	toInt() {
+		return this.sign * this.state;
 	}
-	this.valueOf = function() {
-		return this.sign*this.state;
+	valueOf() {
+		return this.toString();
 	}
-	this.equals = function(other) {
-		var returnValue = new BetterBoolean("false");
-		switch (typeof other) {
-			default:
-				throw "Invalid comparison type";
-				break;
+	set(value) {
+		switch (typeof value) {
 			case "boolean":
-				if (this.sign == 1) {
-					if ((this.state == 1 && other) || (this.state == 0 && !other)) {
-						returnValue.setState(1);
-					}
-				}
+				this.sign = 1;
+				this.state = value;
 				break;
 			case "string":
-				if (other.toLowerCase() == this.toString()) {
-					returnValue.setState(1);
-				}
-				break;
-			case "number":
-				if (this.toInt() == other) {
-					returnValue.setState(1);
-				}
-				break;
-			case "object":
-				if (other.constructor.name == "BetterBoolean") {
-					if (this.state == other.state && this.sign == other.sign) {
-						returnValue.setState(1);
-					}
-				} else {
-					throw "Invalid comparison type";
-				}
-				break;
-		}
-		return returnValue;
-	}
-	this.set = function(value) {
-		if (value != undefined) {
-			if (typeof value == "boolean") {
-				this.sign = 1;
-				if (value) {
-					this.state = 1;
-				} else {
-					this.state = 0;
-				}
-			} else if (typeof value == "object" && value.constructor.name == "BetterBoolean") {
-				this.sign = value.sign;
-				this.state = value.state;
-			} else if (typeof value == "string" && (value == "true" || value == "false" || value == "-true" || value == "-false")) {
 				switch (value) {
 					default:
-						throw "Invalid initial value";
-						break;
+						throw new Error("Invalid string value");
 					case "true":
-						this.state = 1;
 						this.sign = 1;
+						this.state = true;
 						break;
 					case "false":
-						this.state = 0;
 						this.sign = 1;
+						this.state = false;
 						break;
 					case "-true":
-						this.state = 1;
 						this.sign = -1;
+						this.state = true;
 						break;
 					case "-false":
-						this.state = 0;
 						this.sign = -1;
+						this.state = false;
 						break;
 				}
-			} else if (typeof value == "number" && (value == -1 || value == -0 || value == 0 || value == 1)) {
+				break;
+			case "number":
 				if (value == 1) {
 					this.sign = 1;
-					this.state = 1;
+					this.state = true;
 				} else if (value == -1) {
 					this.sign = -1;
-					this.state = 1;
-				} else if (value == -0) {
-					this.sign = -1;
-					this.state = 0;
-				} else {
+					this.state = true;
+				} else if (Object.is(value, 0)) {
 					this.sign = 1;
-					this.state = 0;
+					this.state = false;
+				} else if (Object.is(value, -0)) {
+					this.sign = -1;
+					this.state = false;
+				} else {
+					throw new Error("Invalid numerical value");
 				}
-			} else {
-				throw "Invalid value";
-			}
-		} else {
-			throw "No value provided";
+				break;
+			case "object":
+				if (value instanceof BetterBoolean) {
+					this.sign = value.sign;
+					this.state = value.state;
+				} else {
+					throw new Error("Invalid object type");
+				}
+				break;
 		}
 	}
-	this.setSign = function(sign) {
+	setSign(sign) {
 		switch (typeof sign) {
 			default:
-				throw "Invalid sign type";
-				break;
+				throw new Error("Invalid sign type");
 			case "boolean":
-				if (sign) {
-					this.sign = -1;
-				} else {
-					this.sign = 1;
-				}
+			case "string":
+			case "number":
+				var tmpBB = new BetterBoolean(sign);
+				this.setSign(tmpBB);
 				break;
 			case "object":
-				if (sign.constructor.name == "BetterBoolean") {
-					switch (sign.toString()) {
-						case "true":
-							this.sign = -1;
-						case "-false":
-							this.sign = -1;
-							break;
-						case "-true":
-							this.sign = 1;
-						case "false":
-							this.sign = 1;
-							break;
+				if(sign instanceof BetterBoolean) {
+					this.sign = (sign.state ? 1 : -1);
+					if (sign.sign == -1) {
+						this.sign = (-1)*this.sign;
 					}
-				} else {
-					throw "Invalid sign object type";
-				}
-				break;
-			case "number":
-				if (sign == -1 || sign == 1) {
-					this.sign = sign;
-				} else {
-					throw "Invalid sign value";
-				}
-				break;
-			case "string":
-				if (sign.toLowerCase() == "false" || sign.toLowerCase() == "positive") {
-					this.sign = 1;
-				} else if (sign.toLowerCase() == "true" || sign.toLowerCase() == "negative") {
-					this.sign = -1;
-				} else {
-					throw "Invalid sign value";
 				}
 				break;
 		}
 	}
-	this.setState = function(state) {
-		switch(typeof state) {
+	setState(state) {
+		switch (typeof state) {
 			default:
-				throw "Invalid state type";
-				break;
+				throw new Error("Invalid state type");
 			case "boolean":
-				if (state) {
-					this.state = 1;
-				} else {
-					this.state = 0;
-				}
+			case "string":
+			case "number":
+				var tmpBB = new BetterBoolean(state);
+				this.setState(tmpBB);
 				break;
 			case "object":
-				if (sign.constructor.name == "BetterBoolean") {
-					switch (state.toString()) {
-						case "true":
-							this.state = 1;
-						case "-false":
-							this.state = 1;
-							break;
-						case "-true":
-							this.state = 0;
-						case "false":
-							this.state = 0;
-							break;
+				if(state instanceof BetterBoolean) {
+					this.state = state.state;
+					if (state.sign == -1) {
+						this.state = !this.state;
 					}
-				} else {
-					throw "Invalid state object type";
-				}
-			case "number":
-				if (state == 0 || state == 1) {
-					this.state = state;
-				} else {
-					throw "Invalid state value";
-				}
-				break;
-			case "string":
-				if (sign.toLowerCase() == "true") {
-					this.state = 1;
-				} else if (sign.toLowerCase() == "false") {
-					this.state = 0;
-				} else {
-					throw "Invalid sign value";
 				}
 				break;
 		}
 	}
-	return this.sign*this.state;
+	equals(other) {
+		var retVal = new BetterBoolean();
+		switch (typeof other) {
+			default:
+				throw new Error("Invalid comparison type");
+			case "boolean":
+			case "string":
+			case "number":
+				var tmpBB = new BetterBoolean(other);
+				retVal = this.equals(tmpBB);
+				break;
+			case "object":
+				retVal.setState(other instanceof BetterBoolean && this.sign == other.sign && this.state == other.state);
+				break;
+		}
+		return retVal;
+	}
 }
+export default BetterBoolean;
