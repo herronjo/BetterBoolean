@@ -22,22 +22,22 @@ class BetterBoolean {
 	 */
 	type = "BetterBoolean";
 	/**
-	 * Converts the BetterBoolean to a String.
-	 * @returns The String representation of the BetterBoolean.
+	 * Converts the BetterBoolean to a string.
+	 * @returns {string} The string representation of the BetterBoolean.
 	 */
 	toString() {
 		return ((this.sign == -1) ? "-" : "").concat(this.state.toString());
 	}
 	/**
 	 * Converts the BetterBoolean to an Integer.
-	 * @returns The Integer representation of the BetterBoolean.
+	 * @returns {number} The Integer representation of the BetterBoolean.
 	 */
 	toInt() {
 		return this.sign * this.state;
 	}
 	/**
 	 * Converts the BetterBoolean to its primitive representation.
-	 * @returns The String representation of the BetterBoolean.
+	 * @returns {string} The String representation of the BetterBoolean.
 	 */
 	valueOf() {
 		return this.toString();
@@ -152,7 +152,7 @@ class BetterBoolean {
 	/**
 	 * Compare two BetterBooleans or the BetterBoolean to any compatible type.
 	 * @param {*} other The other object to compare the BetterBoolean to.
-	 * @returns A BetterBoolean representing if the BetterBoolean and other object are equal.
+	 * @returns {BetterBoolean} A BetterBoolean representing if the BetterBoolean and other object are equal.
 	 */
 	equals(other) {
 		var retVal = new BetterBoolean();
